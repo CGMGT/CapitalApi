@@ -22,18 +22,10 @@ public class HistorialCalculoService implements ICatalog<HistorialCalculoEntity>
     }
 
 
-    public List<HistorialCalculoEntity> getAllHistorialCalculo() {
-        return historialCalculoRepository.findAll();
-    }
-
-    public HistorialCalculoEntity addHistorialCalculo(HistorialCalculoEntity historialCalculoEntity) {
-        return historialCalculoRepository.save(historialCalculoEntity);
-    }
-
     @Override
     public List<HistorialCalculoEntity> findAll() throws ResourcesNotFoundException {
         try {
-            return (List<HistorialCalculoEntity>) this.historialCalculoRepository.findAll();
+            return this.historialCalculoRepository.findAll();
         } catch (Exception ex) {
 
             throw new ResourcesNotFoundException();
@@ -58,6 +50,11 @@ public class HistorialCalculoService implements ICatalog<HistorialCalculoEntity>
 
     @Override
     public HistorialCalculoEntity create(HistorialCalculoEntity entity, Long requesterId) throws RequesterNotFoundException, ResourceCreateException {
-        return null;
+        try {
+            return this.historialCalculoRepository.save(entity);
+        } catch (Exception ex) {
+
+            throw new ResourceCreateException();
+        }
     }
 }

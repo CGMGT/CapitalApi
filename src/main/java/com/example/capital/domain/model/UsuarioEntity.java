@@ -17,17 +17,17 @@ public class UsuarioEntity {
     private Long id;
 
     @Size(max = 50)
-    @NotNull
+    @Basic
     @Column(name = "usuario", nullable = false, length = 50)
     private String usuario;
 
     @Size(max = 150)
-    @NotNull
+    @Basic
     @Column(name = "nombre", nullable = false, length = 150)
     private String nombre;
 
     @Size(max = 50)
-    @NotNull
+    @Basic
     @Column(name = "clave", nullable = false, length = 50)
     private String clave;
 

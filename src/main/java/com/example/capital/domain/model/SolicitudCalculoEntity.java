@@ -1,11 +1,10 @@
 package com.example.capital.domain.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -13,27 +12,28 @@ import java.time.OffsetDateTime;
 @Table(name = "solicitud_calculos")
 public class SolicitudCalculoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calculo_generator")
+    @SequenceGenerator(name = "calculo_generator", sequenceName = "SEQ_CALCULOS", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
+    @Basic
     @Column(name = "montoInicial", nullable = false)
     private Double montoInicial;
 
-    @NotNull
+    @Basic
     @Column(name = "tasaInteres", nullable = false)
     private Double tasaInteres;
 
-    @NotNull
+    @Basic
     @Column(name = "anios", nullable = false)
     private Short anios;
 
-    @NotNull
+    @Basic
     @Column(name = "fechaGrabacion", nullable = false)
-    private OffsetDateTime fechaGrabacion;
+    private Timestamp fechaGrabacion;
 
-    @NotNull
+    @Basic
     @Column(name = "usuarioGrabacion", nullable = false)
     private Integer usuarioGrabacion;
 

@@ -2,15 +2,19 @@ package com.example.capital.infrastructure.web;
 
 import com.example.capital.application.service.SolicitudCalculoService;
 import com.example.capital.domain.model.SolicitudCalculoEntity;
+import com.example.capital.util.exception.RequesterNotFoundException;
+import com.example.capital.util.exception.ResourceCreateException;
+import com.example.capital.util.exception.ResourceNotFoundException;
+import com.example.capital.util.exception.ResourcesNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/calcular-interes")
-public class SolicitudCalculoController {
+public class SolicitudCalculoController{
 
     private final SolicitudCalculoService solicitudCalculoService;
 
@@ -19,19 +23,30 @@ public class SolicitudCalculoController {
     }
 
     @GetMapping
-    public List<SolicitudCalculoEntity> getAllSolicitudCalculo() {
-        return solicitudCalculoService.getAllSolicitudCalculo();
+    public ResponseEntity findAll() throws ResourcesNotFoundException {
+        try {
+            return ResponseEntity.ok(this.solicitudCalculoService.findAll());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SolicitudCalculoEntity> getSolicitudCalculoById(@PathVariable Long id) {
-        Optional<SolicitudCalculoEntity> product = solicitudCalculoService.getSolicitudCalculoById(id);
-        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/findById")
+    public ResponseEntity findById(@RequestParam(name = "id", required = true) Long id) throws ResourceNotFoundException {
+        try {
+            return ResponseEntity.ok(this.solicitudCalculoService.findById(id));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
-    @PostMapping
-    public ResponseEntity<SolicitudCalculoEntity> createSolicitudCalculo(@RequestBody SolicitudCalculoEntity solicitudCalculoEntity) {
-        SolicitudCalculoEntity savedSolicitudCalculoEntity = solicitudCalculoService.addSolicitudCalculo(solicitudCalculoEntity);
-        return ResponseEntity.ok(savedSolicitudCalculoEntity);
+    @PostMapping("/{requesterId}")
+    public ResponseEntity create(@RequestBody SolicitudCalculoEntity entity, @PathVariable(required = true) Long requesterId) throws RequesterNotFoundException, ResourceCreateException {
+        try {
+            return ResponseEntity.ok(this.solicitudCalculoService.calcular(entity, requesterId));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
+
 }
