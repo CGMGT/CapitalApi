@@ -2,10 +2,7 @@ package com.example.capital.infrastructure.web;
 
 import com.example.capital.application.service.SolicitudCalculoService;
 import com.example.capital.domain.model.SolicitudCalculoEntity;
-import com.example.capital.util.exception.RequesterNotFoundException;
-import com.example.capital.util.exception.ResourceCreateException;
-import com.example.capital.util.exception.ResourceNotFoundException;
-import com.example.capital.util.exception.ResourcesNotFoundException;
+import com.example.capital.util.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +38,7 @@ public class SolicitudCalculoController{
     }
 
     @PostMapping("/{requesterId}")
-    public ResponseEntity create(@RequestBody SolicitudCalculoEntity entity, @PathVariable(required = true) Long requesterId) throws RequesterNotFoundException, ResourceCreateException {
+    public ResponseEntity create(@RequestBody SolicitudCalculoEntity entity, @PathVariable(required = true) Long requesterId) throws ResourceNotFoundException, ValidatorException  {
         try {
             return ResponseEntity.ok(this.solicitudCalculoService.calcular(entity, requesterId));
         } catch (Exception ex) {

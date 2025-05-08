@@ -2,6 +2,9 @@ package com.example.capital.domain.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,14 +22,17 @@ public class SolicitudCalculoEntity {
 
     @Basic
     @Column(name = "montoInicial", nullable = false)
+    @Positive(message = "Monto Inicial debe ser mayor que cero")
     private Double montoInicial;
 
     @Basic
     @Column(name = "tasaInteres", nullable = false)
+    @Positive(message = "Tasa de Interés debe ser mayor que cero")
     private Double tasaInteres;
 
     @Basic
     @Column(name = "anios", nullable = false)
+    @Min(value = 1, message = "El número de años debe ser igual o mayor que 1")
     private Short anios;
 
     @Basic
